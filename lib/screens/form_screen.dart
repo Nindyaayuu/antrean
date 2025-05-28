@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/antrean.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:intl/intl.dart';
 
 class FormScreen extends StatefulWidget {
   final Antrean? antrean;
@@ -20,6 +22,8 @@ class FormScreen extends StatefulWidget {
 class _FormScreenState extends State<FormScreen> {
   late TextEditingController namaController;
   late TextEditingController layananController;
+  late DateTime selectedPickupTime;
+  String selectedFileName = '';
 
   @override
   void initState() {
@@ -28,19 +32,28 @@ class _FormScreenState extends State<FormScreen> {
     layananController = TextEditingController(
       text: widget.antrean?.layanan ?? '',
     );
+    selectedPickupTime = widget.antrean?.pickupTime ?? DateTime.now();
+    selectedFileName = widget.antrean?.fileName ?? '';
   }
 
   void simpanAntrean() {
     final antrean = Antrean(
       nama: namaController.text,
       layanan: layananController.text,
-      pickupTime: DateTime.now(),
-      fileName: '',
+      pickupTime: selectedPickupTime,
+      fileName: selectedFileName,
       nomorAntrean: widget.nextNomorAntrean,
     );
 
     widget.onSave(antrean);
     Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    namaController.dispose();
+    layananController.dispose();
+    super.dispose();
   }
 
   @override
@@ -59,7 +72,45 @@ class _FormScreenState extends State<FormScreen> {
               controller: layananController,
               decoration: InputDecoration(labelText: 'Layanan'),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Tanggal Ambil: ${DateFormat('yyyy-MM-dd').format(selectedPickupTime)}",
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.calendar_today),
+                  onPressed: () async {
+                    final picked = await showDatePicker(
+                      context: context,
+                      initialDate: selectedPickupTime,
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) {
+                      setState(() => selectedPickupTime = picked);
+                    }
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            ElevatedButton.icon(
+              icon: Icon(Icons.attach_file),
+              label: Text('Pilih File'),
+              onPressed: () async {
+                final result = await FilePicker.platform.pickFiles();
+                if (result != null) {
+                  setState(() {
+                    selectedFileName = result.files.single.name;
+                  });
+                }
+              },
+            ),
+            if (selectedFileName.isNotEmpty) Text('File: $selectedFileName'),
+            Spacer(),
             ElevatedButton(onPressed: simpanAntrean, child: Text('Simpan')),
           ],
         ),
