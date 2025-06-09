@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/antrean.dart';
 
 class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
+
   final List<Antrean> antreanList = [
     Antrean(
       nama: 'Budi',
@@ -14,7 +16,7 @@ class HomeScreen extends StatelessWidget {
       nama: 'Sari',
       layanan: 'Cetak Spanduk',
       pickupTime: DateTime.now(),
-      fileName: 'spanduk.ai',
+      fileName: 'spanduk.cdr',
       nomorAntrean: 2,
     ),
   ];

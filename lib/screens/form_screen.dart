@@ -36,6 +36,31 @@ class _FormScreenState extends State<FormScreen> {
     selectedFileName = widget.antrean?.fileName ?? '';
   }
 
+  Future<void> pilihTanggal() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: selectedPickupTime,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        selectedPickupTime = picked;
+      });
+    }
+  }
+
+  Future<void> pilihFile() async {
+    final result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      setState(() {
+        selectedFileName = result.files.single.name;
+      });
+    }
+  }
+
   void simpanAntrean() {
     final antrean = Antrean(
       nama: namaController.text,
@@ -50,19 +75,12 @@ class _FormScreenState extends State<FormScreen> {
   }
 
   @override
-  void dispose() {
-    namaController.dispose();
-    layananController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Form Antrean')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
+        child: ListView(
           children: [
             TextField(
               controller: namaController,
@@ -82,17 +100,7 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 IconButton(
                   icon: Icon(Icons.calendar_today),
-                  onPressed: () async {
-                    final picked = await showDatePicker(
-                      context: context,
-                      initialDate: selectedPickupTime,
-                      firstDate: DateTime(2020),
-                      lastDate: DateTime(2100),
-                    );
-                    if (picked != null) {
-                      setState(() => selectedPickupTime = picked);
-                    }
-                  },
+                  onPressed: pilihTanggal,
                 ),
               ],
             ),
@@ -110,7 +118,7 @@ class _FormScreenState extends State<FormScreen> {
               },
             ),
             if (selectedFileName.isNotEmpty) Text('File: $selectedFileName'),
-            Spacer(),
+            SizedBox(height: 20),
             ElevatedButton(onPressed: simpanAntrean, child: Text('Simpan')),
           ],
         ),
