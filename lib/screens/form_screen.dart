@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import '../models/antrean.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:intl/intl.dart';
+import '../models/antrean.dart';
 
 class FormScreen extends StatefulWidget {
   final Antrean? antrean;
-  final void Function(Antrean) onSave;
-  final int nextNomorAntrean;
+  final int? nextNomorAntrean;
+  final Function(Antrean, PlatformFile)? onSave;
 
   const FormScreen({
     super.key,
     this.antrean,
-    required this.onSave,
-    required this.nextNomorAntrean,
+    this.nextNomorAntrean,
+    this.onSave,
   });
 
   @override
@@ -20,107 +19,127 @@ class FormScreen extends StatefulWidget {
 }
 
 class _FormScreenState extends State<FormScreen> {
-  late TextEditingController namaController;
-  late TextEditingController layananController;
-  late DateTime selectedPickupTime;
-  String selectedFileName = '';
+  final _formKey = GlobalKey<FormState>();
+  String nama = '';
+  String layanan = '';
+  DateTime? pickupTime;
+  PlatformFile? pickedFile;
 
   @override
   void initState() {
     super.initState();
-    namaController = TextEditingController(text: widget.antrean?.nama ?? '');
-    layananController = TextEditingController(
-      text: widget.antrean?.layanan ?? '',
-    );
-    selectedPickupTime = widget.antrean?.pickupTime ?? DateTime.now();
-    selectedFileName = widget.antrean?.fileName ?? '';
+    if (widget.antrean != null) {
+      final antrean = widget.antrean!;
+      nama = antrean.nama;
+      layanan = antrean.layanan;
+      pickupTime = antrean.pickupTime;
+    }
   }
 
-  Future<void> pilihTanggal() async {
-    final picked = await showDatePicker(
+  void _submit() async {
+    if (_formKey.currentState!.validate() &&
+        pickupTime != null &&
+        pickedFile != null) {
+      _formKey.currentState!.save();
+
+      final antrean = Antrean(
+        id: widget.antrean?.id ?? '',
+        nama: nama,
+        layanan: layanan,
+        pickupTime: pickupTime!,
+        fileName: pickedFile!.name,
+        nomorAntrean:
+            widget.nextNomorAntrean ?? DateTime.now().millisecondsSinceEpoch,
+      );
+
+      final onSave = widget.onSave;
+      if (onSave != null) {
+        onSave(antrean, pickedFile!);
+      }
+
+      if (!mounted) return;
+      Navigator.pop(context);
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Lengkapi semua data dan pilih file')),
+      );
+    }
+  }
+
+  void _pickFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      setState(() {
+        pickedFile = result.files.first;
+      });
+    }
+  }
+
+  void _pickDate() async {
+    final result = await showDatePicker(
       context: context,
-      initialDate: selectedPickupTime,
+      initialDate: DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
     );
-
-    if (picked != null) {
-      setState(() {
-        selectedPickupTime = picked;
-      });
-    }
-  }
-
-  Future<void> pilihFile() async {
-    final result = await FilePicker.platform.pickFiles();
-
     if (result != null) {
       setState(() {
-        selectedFileName = result.files.single.name;
+        pickupTime = result;
       });
     }
-  }
-
-  void simpanAntrean() {
-    final antrean = Antrean(
-      nama: namaController.text,
-      layanan: layananController.text,
-      pickupTime: selectedPickupTime,
-      fileName: selectedFileName,
-      nomorAntrean: widget.nextNomorAntrean,
-    );
-
-    widget.onSave(antrean);
-    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Form Antrean')),
+      appBar: AppBar(title: const Text('Form Antrean')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            TextField(
-              controller: namaController,
-              decoration: InputDecoration(labelText: 'Nama'),
-            ),
-            TextField(
-              controller: layananController,
-              decoration: InputDecoration(labelText: 'Layanan'),
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "Tanggal Ambil: ${DateFormat('yyyy-MM-dd').format(selectedPickupTime)}",
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.calendar_today),
-                  onPressed: pilihTanggal,
-                ),
-              ],
-            ),
-            SizedBox(height: 10),
-            ElevatedButton.icon(
-              icon: Icon(Icons.attach_file),
-              label: Text('Pilih File'),
-              onPressed: () async {
-                final result = await FilePicker.platform.pickFiles();
-                if (result != null) {
-                  setState(() {
-                    selectedFileName = result.files.single.name;
-                  });
-                }
-              },
-            ),
-            if (selectedFileName.isNotEmpty) Text('File: $selectedFileName'),
-            SizedBox(height: 20),
-            ElevatedButton(onPressed: simpanAntrean, child: Text('Simpan')),
-          ],
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                initialValue: nama,
+                decoration: const InputDecoration(labelText: 'Nama'),
+                onSaved: (value) => nama = value ?? '',
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty ? 'Wajib diisi' : null,
+              ),
+              TextFormField(
+                initialValue: layanan,
+                decoration: const InputDecoration(labelText: 'Layanan'),
+                onSaved: (value) => layanan = value ?? '',
+                validator:
+                    (value) =>
+                        value == null || value.isEmpty ? 'Wajib diisi' : null,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                pickupTime == null
+                    ? 'Pilih tanggal'
+                    : 'Tanggal: ${pickupTime!.toLocal()}'.split(' ')[0],
+              ),
+              ElevatedButton(
+                onPressed: _pickDate,
+                child: const Text('Pilih Tanggal'),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                pickedFile == null
+                    ? 'Belum ada file'
+                    : 'File: ${pickedFile!.name}',
+              ),
+              ElevatedButton(
+                onPressed: _pickFile,
+                child: const Text('Pilih File'),
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(onPressed: _submit, child: const Text('Simpan')),
+            ],
+          ),
         ),
       ),
     );

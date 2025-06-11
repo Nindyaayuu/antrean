@@ -74,6 +74,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "fixnum",
+      "rootUri": "file:///C:/Users/NINDYA/AppData/Local/Pub/Cache/hosted/pub.dev/fixnum-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///E:/Documents/Software/flutter_windows_3.29.1-stable/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -186,6 +192,12 @@
       "rootUri": "file:///C:/Users/NINDYA/AppData/Local/Pub/Cache/hosted/pub.dev/lints-5.1.1",
       "packageUri": "lib/",
       "languageVersion": "3.6"
+    },
+    {
+      "name": "logger",
+      "rootUri": "file:///C:/Users/NINDYA/AppData/Local/Pub/Cache/hosted/pub.dev/logger-2.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "matcher",
@@ -362,6 +374,12 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "sprintf",
+      "rootUri": "file:///C:/Users/NINDYA/AppData/Local/Pub/Cache/hosted/pub.dev/sprintf-7.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "stack_trace",
       "rootUri": "file:///C:/Users/NINDYA/AppData/Local/Pub/Cache/hosted/pub.dev/stack_trace-1.12.1",
       "packageUri": "lib/",
@@ -464,6 +482,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "uuid",
+      "rootUri": "file:///C:/Users/NINDYA/AppData/Local/Pub/Cache/hosted/pub.dev/uuid-4.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///C:/Users/NINDYA/AppData/Local/Pub/Cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
@@ -536,7 +560,7 @@
       "languageVersion": "3.7"
     }
   ],
-  "generated": "2025-06-09T03:09:30.176470Z",
+  "generated": "2025-06-10T02:34:51.973972Z",
   "generator": "pub",
   "generatorVersion": "3.7.0",
   "flutterRoot": "file:///E:/Documents/Software/flutter_windows_3.29.1-stable/flutter",

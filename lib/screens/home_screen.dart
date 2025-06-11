@@ -1,48 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart'; // <-- Tambahkan ini
 import '../models/antrean.dart';
+import '../services/supabase_service.dart';
 import 'form_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Antrean> antreanList = [
-    Antrean(
-      nama: 'Budi',
-      layanan: 'Cetak Kartu Nama',
-      pickupTime: DateTime.now(),
-      fileName: 'kartu_nama.pdf',
-      nomorAntrean: 1,
-    ),
-    Antrean(
-      nama: 'Sari',
-      layanan: 'Cetak Spanduk',
-      pickupTime: DateTime.now(),
-      fileName: 'spanduk.cdr',
-      nomorAntrean: 2,
-    ),
-  ];
+  List<Antrean> antreanList = [];
 
-  void tambahAntreanBaru(Antrean antrean) {
+  @override
+  void initState() {
+    super.initState();
+    loadAntrean();
+  }
+
+  Future<void> loadAntrean() async {
+    final data = await supabaseService.fetchAntrean();
+    debugPrint("DATA TERAMBIL: ${data.length}");
+    for (var item in data) {
+      debugPrint(
+        "Nama: ${item.nama}, File: ${item.fileName}, Pickup: ${item.pickupTime}",
+      );
+    }
     setState(() {
-      antreanList.add(antrean);
+      antreanList = data;
     });
   }
 
-  void editAntrean(int index, Antrean antreanBaru) {
-    setState(() {
-      antreanList[index] = antreanBaru;
-    });
+  Future<void> tambahAntreanBaru(Antrean antrean, PlatformFile file) async {
+    final result = await supabaseService.tambahAntrean(antrean, file);
+    if (result) {
+      loadAntrean();
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Gagal menambahkan antrean')),
+      );
+    }
   }
 
-  void hapusAntrean(int index) {
-    setState(() {
-      antreanList.removeAt(index);
-    });
+  Future<void> updateAntrean(
+    Antrean antrean,
+    PlatformFile file,
+    int index,
+  ) async {
+    final result = await supabaseService.editAntreanWithFile(antrean, file);
+    if (result) {
+      loadAntrean();
+    } else {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Gagal mengedit antrean')));
+    }
+  }
+
+  Future<void> hapusAntrean(int index) async {
+    final id = antreanList[index].nomorAntrean;
+
+    final result = await supabaseService.hapusAntrean(id);
+    if (result) {
+      setState(() {
+        antreanList.removeAt(index);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Gagal menghapus antrean dari server')),
+      );
+    }
   }
 
   void tandaiSelesai(int index) {
@@ -91,7 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder:
                           (_) => FormScreen(
                             antrean: antrean,
-                            onSave: (updated) => editAntrean(index, updated),
+                            onSave:
+                                (updated, file) =>
+                                    updateAntrean(updated, file, index),
                             nextNomorAntrean: antrean.nomorAntrean,
                           ),
                     ),
@@ -104,9 +137,12 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               itemBuilder:
                   (_) => [
-                    PopupMenuItem(value: 'edit', child: Text('Edit')),
-                    PopupMenuItem(value: 'selesai', child: Text('Selesai')),
-                    PopupMenuItem(value: 'hapus', child: Text('Hapus')),
+                    const PopupMenuItem(value: 'edit', child: Text('Edit')),
+                    const PopupMenuItem(
+                      value: 'selesai',
+                      child: Text('Selesai'),
+                    ),
+                    const PopupMenuItem(value: 'hapus', child: Text('Hapus')),
                   ],
             ),
           );
