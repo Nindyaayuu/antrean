@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import '../models/antrean.dart';
+import 'package:intl/intl.dart';
 
 class FormScreen extends StatefulWidget {
   final Antrean? antrean;
@@ -119,8 +120,8 @@ class _FormScreenState extends State<FormScreen> {
               const SizedBox(height: 16),
               Text(
                 pickupTime == null
-                    ? 'Pilih tanggal'
-                    : 'Tanggal: ${pickupTime!.toLocal()}'.split(' ')[0],
+                    ? 'Belum pilih tanggal'
+                    : 'Tanggal ambil: ${DateFormat('dd MMM yyyy').format(pickupTime!)}',
               ),
               ElevatedButton(
                 onPressed: _pickDate,

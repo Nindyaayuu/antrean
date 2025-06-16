@@ -1,9 +1,19 @@
-2025/06/10-09:01:35.556 2c10 Reusing MANIFEST C:\Users\NINDYA\AppData\Local\Temp\flutter_tools.d12ef88c\flutter_tools_chrome_device.4c4d282c\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
-2025/06/10-09:01:35.561 2c10 Recovering log #13
-2025/06/10-09:01:35.562 2c10 Reusing old log C:\Users\NINDYA\AppData\Local\Temp\flutter_tools.d12ef88c\flutter_tools_chrome_device.4c4d282c\Default\EdgeCoupons/coupons_data.db/000013.log 
-2025/06/10-09:01:35.563 2c10 Delete type=0 #4
-2025/06/10-09:01:35.563 2c10 Delete type=0 #7
-2025/06/10-09:01:35.563 2c10 Delete type=0 #10
-2025/06/10-09:01:35.734 9c0 Level-0 table #17: started
-2025/06/10-09:01:35.743 9c0 Level-0 table #17: 670904 bytes OK
-2025/06/10-09:01:35.747 9c0 Delete type=0 #13
+2025/06/16-15:58:59.670 2928 Reusing MANIFEST C:\Users\NINDYA\AppData\Local\Temp\flutter_tools.f5ac04ea\flutter_tools_chrome_device.49e8be8c\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2025/06/16-15:58:59.737 2928 Recovering log #16
+2025/06/16-15:58:59.746 2928 Reusing old log C:\Users\NINDYA\AppData\Local\Temp\flutter_tools.f5ac04ea\flutter_tools_chrome_device.49e8be8c\Default\EdgeCoupons/coupons_data.db/000016.log 
+2025/06/16-15:58:59.752 2928 Delete type=0 #4
+2025/06/16-15:58:59.753 2928 Delete type=0 #7
+2025/06/16-15:58:59.753 2928 Delete type=0 #10
+2025/06/16-15:58:59.753 2928 Delete type=0 #13
+2025/06/16-15:59:01.262 27e0 Level-0 table #20: started
+2025/06/16-15:59:01.277 27e0 Level-0 table #20: 671912 bytes OK
+2025/06/16-15:59:01.282 27e0 Delete type=0 #16
+2025/06/16-15:59:01.283 1b68 Compacting 4@0 + 1@1 files
+2025/06/16-15:59:01.299 1b68 Generated table #21@0: 3 keys, 671912 bytes
+2025/06/16-15:59:01.299 1b68 Compacted 4@0 + 1@1 files => 671912 bytes
+2025/06/16-15:59:01.301 1b68 compacted to: files[ 0 1 1 0 0 0 0 ]
+2025/06/16-15:59:01.302 1b68 Delete type=2 #8
+2025/06/16-15:59:01.303 1b68 Delete type=2 #11
+2025/06/16-15:59:01.303 1b68 Delete type=2 #14
+2025/06/16-15:59:01.303 1b68 Delete type=2 #17
+2025/06/16-15:59:01.303 1b68 Delete type=2 #20

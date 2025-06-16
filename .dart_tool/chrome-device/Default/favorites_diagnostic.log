@@ -29,3 +29,7 @@
 2025-06-10 02:00:34.838: [INFO] BookmarkModelLoaded, ids_reassigned: 0
 2025-06-10 02:00:34.838: [INFO] OnDoneLoading sync enabled: 0
 2025-06-10 02:00:34.842: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2025-06-16 08:58:46.657: [INFO] VisibilityChanged: 0
+2025-06-16 08:58:46.750: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2025-06-16 08:58:46.750: [INFO] OnDoneLoading sync enabled: 0
+2025-06-16 08:58:46.752: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
