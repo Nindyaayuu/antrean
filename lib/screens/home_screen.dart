@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart'; // <-- Tambahkan ini
+import 'package:file_picker/file_picker.dart';
 import '../models/antrean.dart';
 import '../services/supabase_service.dart';
-import 'form_screen.dart';
+import '../widgets/form_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -100,6 +100,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _showFormDialog(BuildContext context) {
+    final nextNomor = antreanList.length + 1;
+
+    showDialog(
+      context: context,
+      builder:
+          (context) => FormDialog(
+            nextNomorAntrean: nextNomor,
+            onSave: (antrean, file) {
+              tambahAntreanBaru(antrean, file);
+            },
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,12 +135,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     context,
                     MaterialPageRoute(
                       builder:
-                          (_) => FormScreen(
-                            antrean: antrean,
-                            onSave:
-                                (updated, file) =>
-                                    updateAntrean(updated, file, index),
-                            nextNomorAntrean: antrean.nomorAntrean,
+                          (_) => Scaffold(
+                            appBar: AppBar(title: const Text('Edit Antrean')),
+                            body: Center(child: Text('Edit belum dibuat')),
                           ),
                     ),
                   );
@@ -136,32 +148,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
               },
               itemBuilder:
-                  (_) => [
-                    const PopupMenuItem(value: 'edit', child: Text('Edit')),
-                    const PopupMenuItem(
-                      value: 'selesai',
-                      child: Text('Selesai'),
-                    ),
-                    const PopupMenuItem(value: 'hapus', child: Text('Hapus')),
+                  (_) => const [
+                    PopupMenuItem(value: 'edit', child: Text('Edit')),
+                    PopupMenuItem(value: 'selesai', child: Text('Selesai')),
+                    PopupMenuItem(value: 'hapus', child: Text('Hapus')),
                   ],
             ),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder:
-                  (_) => FormScreen(
-                    onSave: tambahAntreanBaru,
-                    nextNomorAntrean: antreanList.length + 1,
-                  ),
-            ),
-          );
-        },
-        child: Icon(Icons.add),
+        onPressed: () => _showFormDialog(context),
+        child: const Icon(Icons.add),
       ),
     );
   }
