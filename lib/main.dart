@@ -10,6 +10,7 @@ void main() async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1maGVxd2pvaGphdm5wc3d0bGFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzODM4NjgsImV4cCI6MjA2NDk1OTg2OH0.LFHgp-bdcUcomfbN0WhqLfmF9Q9hoyX4On4bd6p3ADs',
   );
+
   runApp(const MyApp());
 }
 
@@ -21,7 +22,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Antrean Percetakan',
-      home: LoginScreen(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
+      ),
+      home: const LoginScreen(),
     );
   }
 }

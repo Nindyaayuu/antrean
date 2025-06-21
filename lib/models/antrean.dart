@@ -17,9 +17,7 @@ class Antrean {
 
   factory Antrean.fromMap(Map<String, dynamic> map) {
     return Antrean(
-      id:
-          map['id']
-              .toString(), // id bisa berupa int (dari Supabase auto-increment)
+      id: map['id'].toString(),
       nama: map['nama'] ?? '',
       layanan: map['layanan'] ?? '',
       pickupTime: DateTime.parse(map['pickup_time']),

@@ -1,23 +1,26 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:uuid/uuid.dart';
 import '../models/antrean.dart';
-import 'package:file_picker/file_picker.dart';
 
 class SupabaseService {
   final supabase = Supabase.instance.client;
 
   Future<bool> tambahAntrean(Antrean antrean, PlatformFile file) async {
     try {
-      // Upload file ke Supabase Storage
-      final fileBytes = file.bytes!;
+      final fileBytes = file.bytes;
+      if (fileBytes == null) {
+        debugPrint('❌ Gagal: File kosong atau tidak dipilih');
+        return false;
+      }
+
       final fileName = '${const Uuid().v4()}_${file.name}';
 
       await supabase.storage
           .from('antrean-files')
           .uploadBinary(fileName, fileBytes);
 
-      // Simpan data antrean ke Supabase Database
       await supabase.from('antrean').insert({
         'nama': antrean.nama,
         'layanan': antrean.layanan,
@@ -28,7 +31,7 @@ class SupabaseService {
 
       return true;
     } catch (e) {
-      debugPrint('Error tambahAntrean: $e');
+      debugPrint('❌ Error tambahAntrean: $e');
       return false;
     }
   }
@@ -40,39 +43,23 @@ class SupabaseService {
           .select()
           .order('pickup_time', ascending: true);
 
-      debugPrint("RESPON MURNI: $response");
-
-      return (response as List).map((data) => Antrean.fromMap(data)).toList();
+      return (response as List).map((item) => Antrean.fromMap(item)).toList();
     } catch (e) {
-      debugPrint('Error fetchAntrean: $e');
+      debugPrint('❌ Error fetchAntrean: $e');
       return [];
-    }
-  }
-
-  //Future<List<Antrean>> fetchAntrean() async {
-  //final response = await supabase.from('antrean').select();
-
-  //return (response as List).map((data) => Antrean.fromMap(data)).toList();
-  //}
-
-  Future<bool> hapusAntrean(int nomorAntrean) async {
-    try {
-      await supabase.from('antrean').delete().eq('nomor_antrean', nomorAntrean);
-      return true;
-    } catch (e) {
-      debugPrint('Error hapusAntrean: $e');
-      return false;
     }
   }
 
   Future<bool> editAntreanWithFile(Antrean antrean, PlatformFile file) async {
     try {
-      final fileBytes = file.bytes!;
-      final fileName = '${const Uuid().v4()}_${file.name}';
+      String fileName = antrean.fileName;
 
-      await supabase.storage
-          .from('antrean-files')
-          .uploadBinary(fileName, fileBytes);
+      if (file.bytes != null && file.size > 0) {
+        fileName = '${const Uuid().v4()}_${file.name}';
+        await supabase.storage
+            .from('antrean-files')
+            .uploadBinary(fileName, file.bytes!);
+      }
 
       await supabase
           .from('antrean')
@@ -86,7 +73,17 @@ class SupabaseService {
 
       return true;
     } catch (e) {
-      debugPrint('Error editAntreanWithFile: $e');
+      debugPrint('❌ Error editAntreanWithFile: $e');
+      return false;
+    }
+  }
+
+  Future<bool> hapusAntrean(int nomorAntrean) async {
+    try {
+      await supabase.from('antrean').delete().eq('nomor_antrean', nomorAntrean);
+      return true;
+    } catch (e) {
+      debugPrint('❌ Error hapusAntrean: $e');
       return false;
     }
   }

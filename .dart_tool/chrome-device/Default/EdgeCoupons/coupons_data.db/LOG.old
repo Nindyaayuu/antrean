@@ -1,9 +1,32 @@
-2025/06/10-09:01:35.556 2c10 Reusing MANIFEST C:\Users\NINDYA\AppData\Local\Temp\flutter_tools.d12ef88c\flutter_tools_chrome_device.4c4d282c\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
-2025/06/10-09:01:35.561 2c10 Recovering log #13
-2025/06/10-09:01:35.562 2c10 Reusing old log C:\Users\NINDYA\AppData\Local\Temp\flutter_tools.d12ef88c\flutter_tools_chrome_device.4c4d282c\Default\EdgeCoupons/coupons_data.db/000013.log 
-2025/06/10-09:01:35.563 2c10 Delete type=0 #4
-2025/06/10-09:01:35.563 2c10 Delete type=0 #7
-2025/06/10-09:01:35.563 2c10 Delete type=0 #10
-2025/06/10-09:01:35.734 9c0 Level-0 table #17: started
-2025/06/10-09:01:35.743 9c0 Level-0 table #17: 670904 bytes OK
-2025/06/10-09:01:35.747 9c0 Delete type=0 #13
+2025/06/21-20:18:08.847 fdc Reusing MANIFEST C:\Users\NINDYA\AppData\Local\Temp\flutter_tools.1887bfd0\flutter_tools_chrome_device.bdaca01d\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2025/06/21-20:18:08.850 fdc Recovering log #43
+2025/06/21-20:18:08.851 fdc Reusing old log C:\Users\NINDYA\AppData\Local\Temp\flutter_tools.1887bfd0\flutter_tools_chrome_device.bdaca01d\Default\EdgeCoupons/coupons_data.db/000043.log 
+2025/06/21-20:18:08.858 fdc Delete type=0 #4
+2025/06/21-20:18:08.859 fdc Delete type=0 #7
+2025/06/21-20:18:08.859 fdc Delete type=2 #8
+2025/06/21-20:18:08.859 fdc Delete type=0 #10
+2025/06/21-20:18:08.860 fdc Delete type=2 #11
+2025/06/21-20:18:08.860 fdc Delete type=0 #13
+2025/06/21-20:18:08.860 fdc Delete type=2 #14
+2025/06/21-20:18:08.861 fdc Delete type=0 #16
+2025/06/21-20:18:08.861 fdc Delete type=2 #17
+2025/06/21-20:18:08.861 fdc Delete type=0 #19
+2025/06/21-20:18:08.861 fdc Delete type=2 #21
+2025/06/21-20:18:08.881 fdc Delete type=0 #23
+2025/06/21-20:18:08.882 fdc Delete type=2 #24
+2025/06/21-20:18:08.882 fdc Delete type=0 #26
+2025/06/21-20:18:08.883 fdc Delete type=2 #27
+2025/06/21-20:18:08.883 fdc Delete type=0 #29
+2025/06/21-20:18:08.883 fdc Delete type=2 #30
+2025/06/21-20:18:08.884 fdc Delete type=0 #32
+2025/06/21-20:18:08.884 fdc Delete type=2 #34
+2025/06/21-20:18:08.885 fdc Delete type=0 #36
+2025/06/21-20:18:08.886 fdc Delete type=2 #37
+2025/06/21-20:18:08.887 fdc Delete type=2 #39
+2025/06/21-20:18:08.888 fdc Delete type=0 #39
+2025/06/21-20:18:08.888 fdc Delete type=2 #40
+2025/06/21-20:18:08.890 fdc Delete type=0 #40
+2025/06/21-20:18:08.890 fdc Delete type=2 #41
+2025/06/21-20:18:09.015 2b94 Level-0 table #48: started
+2025/06/21-20:18:09.029 2b94 Level-0 table #48: 671944 bytes OK
+2025/06/21-20:18:09.031 2b94 Delete type=0 #43
