@@ -21,37 +21,78 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Berhasil daftar, silakan login')),
+        SnackBar(
+          content: const Text('Berhasil daftar, silakan login'),
+          backgroundColor: Colors.pink.shade100,
+        ),
       );
 
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Gagal daftar: ${e.toString()}')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal daftar: ${e.toString()}'),
+          backgroundColor: Colors.pink.shade100,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Daftar Akun')),
+      backgroundColor: Colors.pink.shade50,
+      appBar: AppBar(
+        backgroundColor: Colors.pink.shade100,
+        title: const Text('Daftar Akun'),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+        padding: const EdgeInsets.all(24),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Icon(Icons.person_add, size: 80, color: Colors.pink.shade300),
+                const SizedBox(height: 24),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    filled: true,
+                    fillColor: Colors.pink.shade100,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    filled: true,
+                    fillColor: Colors.pink.shade100,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _signup,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.pink.shade300,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: const Text('Daftar'),
+                  ),
+                ),
+              ],
             ),
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(onPressed: _signup, child: const Text('Daftar')),
-          ],
+          ),
         ),
       ),
     );

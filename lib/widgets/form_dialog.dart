@@ -21,7 +21,7 @@ class FormDialog extends StatefulWidget {
 class _FormDialogState extends State<FormDialog> {
   final _formKey = GlobalKey<FormState>();
   String nama = '';
-  String layanan = '';
+  String? layanan;
   DateTime? pickupTime;
   PlatformFile? pickedFile;
 
@@ -57,25 +57,40 @@ class _FormDialogState extends State<FormDialog> {
     }
   }
 
-  void _pickFile() async {
-    final result = await FilePicker.platform.pickFiles(withData: true);
-    if (result != null && result.files.isNotEmpty) {
-      setState(() {
-        pickedFile = result.files.first;
-      });
-    }
-  }
-
   void _pickDate() async {
     final result = await showDatePicker(
       context: context,
       initialDate: pickupTime ?? DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.pink.shade300,
+              onPrimary: Colors.white,
+              onSurface: Colors.pink.shade800,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(foregroundColor: Colors.pink),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (result != null) {
       setState(() {
         pickupTime = result;
+      });
+    }
+  }
+
+  void _pickFile() async {
+    final result = await FilePicker.platform.pickFiles(withData: true);
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        pickedFile = result.files.first;
       });
     }
   }
@@ -87,7 +102,7 @@ class _FormDialogState extends State<FormDialog> {
       final PlatformFile fileToSave =
           pickedFile ??
           PlatformFile(
-            name: widget.initialData?.fileName ?? 'unknown.pdf',
+            name: widget.initialData?.fileName ?? 'unknown',
             size: 0,
             bytes: null,
           );
@@ -95,7 +110,7 @@ class _FormDialogState extends State<FormDialog> {
       final antrean = Antrean(
         id: widget.initialData?.id ?? '',
         nama: nama,
-        layanan: layanan,
+        layanan: layanan!,
         pickupTime: pickupTime!,
         fileName: fileToSave.name,
         nomorAntrean:
@@ -114,26 +129,37 @@ class _FormDialogState extends State<FormDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.pink.shade50,
       title: Text(
         widget.initialData == null ? 'Tambah Antrean' : 'Edit Antrean',
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
             children: [
+              // NAMA
               TextFormField(
                 initialValue: nama,
-                decoration: const InputDecoration(labelText: 'Nama'),
+                decoration: InputDecoration(
+                  labelText: 'Nama',
+                  filled: true,
+                  fillColor: Colors.pink.shade100,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
                 onSaved: (value) => nama = value ?? '',
                 validator:
                     (value) =>
                         value == null || value.isEmpty ? 'Wajib diisi' : null,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
+
+              // LAYANAN DROPDOWN
               DropdownButtonFormField<String>(
-                value: layanan.isNotEmpty ? layanan : null,
-                decoration: const InputDecoration(labelText: 'Layanan'),
+                value: layanan,
                 items:
                     layananList
                         .map(
@@ -141,12 +167,22 @@ class _FormDialogState extends State<FormDialog> {
                               DropdownMenuItem(value: item, child: Text(item)),
                         )
                         .toList(),
-                onChanged: (value) => setState(() => layanan = value ?? ''),
+                onChanged: (value) => setState(() => layanan = value),
+                decoration: InputDecoration(
+                  labelText: 'Layanan',
+                  filled: true,
+                  fillColor: Colors.pink.shade100,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
                 validator:
                     (value) =>
-                        value == null || value.isEmpty ? 'Pilih layanan' : null,
+                        value == null || value.isEmpty ? 'Wajib dipilih' : null,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
+
+              // TANGGAL
               Row(
                 children: [
                   Expanded(
@@ -154,15 +190,21 @@ class _FormDialogState extends State<FormDialog> {
                       pickupTime == null
                           ? 'Belum pilih tanggal'
                           : 'Tanggal: ${pickupTime!.toLocal().toIso8601String().split("T")[0]}',
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
                   TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.pink.shade100,
+                    ),
                     onPressed: _pickDate,
                     child: const Text('Pilih Tanggal'),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
+
+              // FILE PICKER
               Row(
                 children: [
                   Expanded(
@@ -172,9 +214,13 @@ class _FormDialogState extends State<FormDialog> {
                           : (widget.initialData?.fileName != null
                               ? 'File lama: ${widget.initialData!.fileName}'
                               : 'Belum pilih file'),
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
                   TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.pink.shade100,
+                    ),
                     onPressed: _pickFile,
                     child: const Text('Pilih File'),
                   ),
@@ -189,7 +235,13 @@ class _FormDialogState extends State<FormDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Batal'),
         ),
-        ElevatedButton(onPressed: _submit, child: const Text('Simpan')),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.pink.shade300,
+          ),
+          onPressed: _submit,
+          child: const Text('Simpan'),
+        ),
       ],
     );
   }
